@@ -115,11 +115,11 @@ function Hero() {
       <div className="absolute inset-0 pointer-events-none opacity-[0.035]"
         style={{ backgroundImage: "linear-gradient(oklch(0.4 0.02 250) 1px,transparent 1px),linear-gradient(90deg,oklch(0.4 0.02 250) 1px,transparent 1px)", backgroundSize: "44px 44px" }} />
 
-      <div className="relative w-full mx-auto max-w-7xl px-4 sm:px-6 py-10 lg:py-14">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 xl:gap-20 items-center">
+      <div className="relative w-full mx-auto max-w-7xl px-4 sm:px-6 py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-6 lg:gap-10 xl:gap-16 items-center">
 
           {/* ════ LEFT: Copy ════ */}
-          <div className="flex flex-col gap-6 order-2 lg:order-1">
+          <div className="flex flex-col gap-4 lg:gap-6 order-2 lg:order-1">
 
             {/* Pill badge — pulsing dot + label */}
             <div className="animate-fade-up flex items-center gap-3">
@@ -134,20 +134,20 @@ function Hero() {
             </div>
 
             {/* Headline */}
-            <div className="animate-fade-up animation-delay-1 space-y-1">
-              <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-[3.5rem] font-extrabold tracking-tight leading-[1.08]">
+            <div className="animate-fade-up animation-delay-1 space-y-0.5">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold tracking-tight leading-[1.08]">
                 <span className="text-foreground">Predict Future Air Quality with</span>
               </h1>
-              <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-[3.5rem] font-extrabold tracking-tight leading-[1.08]">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold tracking-tight leading-[1.08]">
                 <span className="shimmer-text">AI-Powered PM2.5</span>
               </h1>
-              <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-[3.5rem] font-extrabold tracking-tight leading-[1.08] text-foreground/70">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold tracking-tight leading-[1.08] text-foreground/70">
                 Forecasting
               </h1>
             </div>
 
             {/* Sub-copy */}
-            <p className="animate-fade-up animation-delay-2 text-sm sm:text-[15px] leading-[1.75] text-muted-foreground max-w-[480px]">
+            <p className="animate-fade-up animation-delay-2 text-sm lg:text-[15px] leading-[1.6] text-muted-foreground max-w-[480px]">
               Over <strong className="text-foreground">1.67 million deaths</strong> in India are attributed to Air Pollution annually.
               AtmoAI uses deep learning to forecast PM2.5 concentrations <strong className="text-foreground">10 hours ahead</strong> — so communities can act before the air turns dangerous.
             </p>
@@ -168,11 +168,11 @@ function Hero() {
             </div>
 
             {/* ── Live stat ticker ── */}
-            <div className="animate-fade-up animation-delay-4 grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            <div className="animate-fade-up animation-delay-4 grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
               {stats.map((s) => (
                 <div key={s.label}
-                  className="flex flex-col gap-0.5 rounded-xl border border-border/60 bg-background/70 backdrop-blur-sm px-3 py-3 shadow-sm">
-                  <span className={`text-xl font-extrabold leading-none ${s.color}`}>{s.value}</span>
+                  className="flex flex-col gap-0.5 rounded-xl border border-border/60 bg-background/70 backdrop-blur-sm px-3 py-2 shadow-sm">
+                  <span className={`text-lg font-extrabold leading-none ${s.color}`}>{s.value}</span>
                   <span className="text-[10px] text-muted-foreground leading-tight">{s.label}</span>
                 </div>
               ))}
@@ -183,10 +183,9 @@ function Hero() {
         <div className="relative animate-float order-1 lg:order-2">
             <div
               ref={mapWrapRef}
-              className="glow-border rounded-2xl border border-border bg-card p-3 shadow-soft"
-              style={{ minHeight: 520, minWidth: 680 }}
+              className="glow-border rounded-2xl border border-border bg-card p-2 shadow-soft w-full mx-auto max-w-[640px] aspect-[4/3] lg:aspect-[1.3] xl:aspect-[1.4]"
             >
-              <IndiaHeatmap height={420} interactive scrollable />
+              <IndiaHeatmap height="100%" interactive scrollable />
             </div>
 
             {/* Floating pill — accuracy */}
@@ -210,6 +209,7 @@ function Hero() {
           </div>
 
         </div>
+      </div>
       </div>
     </section>
   );

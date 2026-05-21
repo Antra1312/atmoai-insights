@@ -13,7 +13,7 @@ export function Logo({ className = "" }: { className?: string }) {
         <span className="text-[9px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:text-[10px] truncate">
           {"predict\u00A0prevent\u00A0protect"}
         </span>
-      </div>
+      </span>
     </Link>
   );
 }
