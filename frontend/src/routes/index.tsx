@@ -73,103 +73,160 @@ function Landing() {
 }
 
 /* ══════════════════════════════════════════════
-   §1 – HERO
+   §1 – HERO  (premium redesign)
 ══════════════════════════════════════════════ */
 function Hero() {
+  const stats = [
+    { value: "94.7%", label: "Forecast Accuracy", color: "text-emerald-600" },
+    { value: "10 hr",  label: "Prediction Window", color: "text-primary" },
+    { value: "12+",    label: "Indian Cities",     color: "text-blue-500" },
+    { value: "1.67M",  label: "Lives at Risk / Yr",color: "text-red-500" },
+  ];
+
   return (
     <section
       id="home"
       className="relative overflow-hidden flex items-center"
       style={{ minHeight: "calc(100dvh - 3.5rem)" }}
     >
-      {/* Animated blob glows */}
-      <div className="animate-blob absolute -top-40 -right-20 h-[500px] w-[500px] rounded-full bg-orange-300/10 blur-3xl pointer-events-none" />
-      <div className="animate-blob animation-delay-blob absolute -bottom-40 -left-20 h-[400px] w-[400px] rounded-full bg-amber-200/10 blur-3xl pointer-events-none" />
+      {/* ── Rich layered background ── */}
+      {/* Warm radial from bottom-right */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 80% 60% at 80% 110%, oklch(0.95 0.06 60 / 0.55) 0%, transparent 65%)" }} />
+      {/* Cool soft blue top-left accent */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 60% 50% at -5% -10%, oklch(0.92 0.04 240 / 0.35) 0%, transparent 60%)" }} />
+      {/* Morphing blobs */}
+      <div className="animate-blob absolute -top-32 right-0 h-80 w-80 md:h-[460px] md:w-[460px] rounded-full bg-orange-400/12 blur-3xl pointer-events-none" />
+      <div className="animate-blob animation-delay-blob absolute bottom-0 -left-24 h-72 w-72 md:h-[380px] md:w-[380px] rounded-full bg-amber-300/10 blur-3xl pointer-events-none" />
+      {/* Grid overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.035]"
+        style={{ backgroundImage: "linear-gradient(oklch(0.4 0.02 250) 1px,transparent 1px),linear-gradient(90deg,oklch(0.4 0.02 250) 1px,transparent 1px)", backgroundSize: "44px 44px" }} />
 
+      <div className="relative w-full mx-auto max-w-7xl px-4 sm:px-6 py-10 lg:py-14">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 xl:gap-20 items-center">
 
-      <div className="relative w-full mx-auto max-w-7xl px-4 sm:px-6 py-12 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-        {/* ── Copy ── */}
-        <div className="flex flex-col gap-5 order-2 lg:order-1">
-          {/* Animated badge */}
-          <div className="animate-fade-up animate-pulse-badge">
-            <Badge
-              variant="outline"
-              className="w-fit gap-1.5 rounded-full border-orange-200 bg-orange-50 px-3 py-1.5 text-[11px] font-semibold text-orange-600 shadow-sm"
-            >
-              <Sparkles className="h-3 w-3" />
-              Powered by Deep Learning · LSTM + Transformer
-            </Badge>
+          {/* ════ LEFT: Copy ════ */}
+          <div className="flex flex-col gap-6 order-2 lg:order-1">
+
+            {/* Pill badge — pulsing dot + label */}
+            <div className="animate-fade-up flex items-center gap-3">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+              </span>
+              <Badge variant="outline" className="rounded-full border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 px-4 py-1.5 text-[11px] font-semibold text-orange-600 shadow-sm gap-1.5">
+                <Sparkles className="h-3 w-3" />
+                AI-Powered · LSTM + Transformer · Live Forecasting
+              </Badge>
+            </div>
+
+            {/* Headline */}
+            <div className="animate-fade-up animation-delay-1 space-y-1">
+              <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-[3.5rem] font-extrabold tracking-tight leading-[1.08]">
+                <span className="text-foreground">Breathe Smarter.</span>
+              </h1>
+              <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-[3.5rem] font-extrabold tracking-tight leading-[1.08]">
+                <span className="shimmer-text">Predict PM2.5.</span>
+              </h1>
+              <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-[3.5rem] font-extrabold tracking-tight leading-[1.08] text-foreground/70">
+                Protect India.
+              </h1>
+            </div>
+
+            {/* Sub-copy */}
+            <p className="animate-fade-up animation-delay-2 text-sm sm:text-[15px] leading-[1.75] text-muted-foreground max-w-[480px]">
+              Over <strong className="text-foreground">1.67 million deaths</strong> in India are attributed to Air Pollution annually.
+              AtmoAI uses deep learning to forecast PM2.5 concentrations <strong className="text-foreground">10 hours ahead</strong> — so communities can act before the air turns dangerous.
+            </p>
+
+            {/* CTAs */}
+            <div className="animate-fade-up animation-delay-3 flex flex-wrap gap-3">
+              <Button asChild size="lg"
+                className="h-12 rounded-2xl gradient-primary text-white shadow-glow px-7 font-semibold hover:opacity-90 hover:scale-[1.02] transition-all active:scale-95 gap-2 text-[15px]">
+                <Link to="/app/dashboard">
+                  Explore Dashboard
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline"
+                className="h-12 rounded-2xl border-2 border-border px-7 font-semibold text-[15px] hover:border-primary hover:bg-primary/5 hover:text-primary transition-all active:scale-95">
+                <Link to="/app/dashboard/pollution">View Forecasts</Link>
+              </Button>
+            </div>
+
+            {/* ── Live stat ticker ── */}
+            <div className="animate-fade-up animation-delay-4 grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              {stats.map((s) => (
+                <div key={s.label}
+                  className="flex flex-col gap-0.5 rounded-xl border border-border/60 bg-background/70 backdrop-blur-sm px-3 py-3 shadow-sm">
+                  <span className={`text-xl font-extrabold leading-none ${s.color}`}>{s.value}</span>
+                  <span className="text-[10px] text-muted-foreground leading-tight">{s.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Headline with shimmer accent */}
-          <div className="animate-fade-up animation-delay-1">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-bold tracking-tight text-foreground leading-[1.12]">
-              Predict Future Air Quality with{" "}
-              <span className="shimmer-text">AI-Powered PM2.5 Forecasting</span>
-            </h1>
-          </div>
+          {/* ════ RIGHT: Dashboard card ════ */}
+          <div className="relative order-1 lg:order-2 animate-float">
+            {/* Main map card */}
+            <div className="relative rounded-3xl border border-border/80 bg-card shadow-[0_20px_60px_-15px_oklch(0.72_0.19_47_/_0.22)] overflow-hidden">
+              {/* Card header bar */}
+              <div className="flex items-center justify-between border-b border-border px-4 py-3 bg-gradient-to-r from-card to-orange-50/40">
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-1.5">
+                    <div className="h-3 w-3 rounded-full bg-red-400" />
+                    <div className="h-3 w-3 rounded-full bg-amber-400" />
+                    <div className="h-3 w-3 rounded-full bg-emerald-400" />
+                  </div>
+                  <span className="ml-1 text-[11px] font-semibold text-muted-foreground">India PM2.5 Live Map</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] text-emerald-600 font-semibold">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  </span>
+                  Live
+                </div>
+              </div>
+              {/* Map */}
+              <div className="p-3">
+                <IndiaHeatmap height={310} interactive />
+              </div>
+            </div>
 
-          <p className="animate-fade-up animation-delay-2 text-sm sm:text-base leading-relaxed text-muted-foreground max-w-lg">
-            Over{" "}
-            <strong className="text-foreground font-semibold">1.67 million deaths</strong>{" "}
-            in India are attributed to Air Pollution annually, causing an economic loss of approximately{" "}
-            <strong className="text-foreground font-semibold">1.36% of India's GDP</strong>.
-            AtmoAI leverages scientific machine learning to track, analyze, and forecast hazardous
-            PM2.5 concentrations before they threaten public health.
-          </p>
-
-          {/* CTA buttons */}
-          <div className="animate-fade-up animation-delay-3 flex flex-wrap gap-3 pt-1">
-            <Button
-              asChild
-              size="lg"
-              className="rounded-xl gradient-primary text-white shadow-glow hover:opacity-90 transition-all active:scale-95 gap-2"
-            >
-              <Link to="/app/dashboard">
-                Explore Dashboard
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="rounded-xl border-border hover:border-primary hover:text-primary transition-all active:scale-95"
-            >
-              <Link to="/app/dashboard/pollution">View Forecasts</Link>
-            </Button>
-          </div>
-
-
-        </div>
-
-        {/* ── Floating map card ── */}
-        <div className="relative animate-float order-1 lg:order-2">
-          <div className="glow-border rounded-2xl border border-border bg-card p-3 shadow-soft">
-            <IndiaHeatmap height={300} interactive />
-          </div>
-
-          {/* Accuracy pill */}
-          <div className="absolute -left-4 top-8 hidden md:block rounded-xl glass p-3 shadow-soft animate-fade-up animation-delay-2">
-            <div className="flex items-center gap-2">
-              <div className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-100 text-emerald-700">
-                <Activity className="h-4 w-4" />
+            {/* Floating pill — accuracy */}
+            <div className="absolute -left-5 top-12 hidden md:flex items-center gap-3 rounded-2xl border border-border/70 bg-white/90 backdrop-blur-md px-4 py-3 shadow-[0_8px_32px_-8px_oklch(0.5_0.1_60_/_0.25)] animate-fade-up animation-delay-2">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-100 text-emerald-600 shrink-0">
+                <Activity className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-[10px] text-muted-foreground">Forecast Accuracy</p>
-                <p className="text-sm font-bold text-foreground">94.7%</p>
+                <p className="text-[10px] text-muted-foreground font-medium">Forecast Accuracy</p>
+                <p className="text-lg font-extrabold text-foreground leading-none">94.7%</p>
+              </div>
+            </div>
+
+            {/* Floating pill — PM2.5 prediction */}
+            <div className="absolute -bottom-5 -right-3 hidden md:block rounded-2xl border border-border/70 bg-white/90 backdrop-blur-md px-4 py-3 shadow-[0_8px_32px_-8px_oklch(0.72_0.19_47_/_0.25)] animate-fade-up animation-delay-3">
+              <p className="text-[10px] text-muted-foreground font-medium">Next 10-hour prediction</p>
+              <p className="text-lg font-extrabold text-primary leading-tight">PM2.5 · 68 μg/m³</p>
+              <div className="mt-1.5 flex items-center gap-2">
+                <Badge className="rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold hover:bg-orange-100 px-2.5">
+                  ⚠ Sensitive Groups
+                </Badge>
+              </div>
+            </div>
+
+            {/* Floating pill — city alert */}
+            <div className="absolute top-1/2 -right-5 -translate-y-1/2 hidden xl:flex items-center gap-2 rounded-xl border border-red-100 bg-red-50/90 backdrop-blur-md px-3 py-2.5 shadow-md animate-fade-up animation-delay-4">
+              <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse shrink-0" />
+              <div>
+                <p className="text-[9px] text-red-500 font-semibold uppercase tracking-wide">Hotspot Alert</p>
+                <p className="text-xs font-bold text-foreground">Delhi · AQI 289</p>
               </div>
             </div>
           </div>
 
-          {/* PM2.5 pill */}
-          <div className="absolute -bottom-4 -right-3 hidden md:block rounded-xl glass p-3 shadow-soft animate-fade-up animation-delay-3">
-            <p className="text-[10px] text-muted-foreground">Next 10-hour prediction</p>
-            <p className="text-base font-bold text-primary">PM2.5 · 68 μg/m³</p>
-            <Badge className="mt-1 rounded-full bg-orange-100 text-orange-700 text-[9px] font-bold hover:bg-orange-100">
-              Sensitive Groups
-            </Badge>
-          </div>
         </div>
       </div>
     </section>
