@@ -14,7 +14,7 @@ import {
   ShieldCheck, Navigation2, MessageSquare, TrendingUp,
   CheckCircle2,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // ShadCN UI
 import { Button } from "@/components/ui/button";
@@ -82,6 +82,18 @@ function Hero() {
     { value: "12+",    label: "Indian Cities",     color: "text-blue-500" },
     { value: "1.67M",  label: "Lives at Risk / Yr",color: "text-red-500" },
   ];
+  const mapWrapRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const wrapper = mapWrapRef.current;
+    if (!wrapper) return;
+    // IndiaHeatmap renders a scrollable inner container with class `relative overflow-auto` when `scrollable` is set.
+    const sc = wrapper.querySelector('.relative.overflow-auto') as HTMLElement | null;
+    const el = sc ?? wrapper;
+    const left = Math.max(0, (el.scrollWidth - el.clientWidth) / 2);
+    const top = Math.max(0, (el.scrollHeight - el.clientHeight) / 2);
+    el.scrollTo({ left, top, behavior: 'smooth' });
+  }, []);
 
   return (
     <section
@@ -167,32 +179,14 @@ function Hero() {
             </div>
           </div>
 
-          {/* ════ RIGHT: Dashboard card ════ */}
-          <div className="relative order-1 lg:order-2 animate-float">
-            {/* Main map card */}
-            <div className="relative rounded-3xl border border-border/80 bg-card shadow-[0_20px_60px_-15px_oklch(0.72_0.19_47_/_0.22)] overflow-hidden">
-              {/* Card header bar */}
-              <div className="flex items-center justify-between border-b border-border px-4 py-3 bg-gradient-to-r from-card to-orange-50/40">
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1.5">
-                    <div className="h-3 w-3 rounded-full bg-red-400" />
-                    <div className="h-3 w-3 rounded-full bg-amber-400" />
-                    <div className="h-3 w-3 rounded-full bg-emerald-400" />
-                  </div>
-                  <span className="ml-1 text-[11px] font-semibold text-muted-foreground">India PM2.5 Live Map</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-emerald-600 font-semibold">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  </span>
-                  Live
-                </div>
-              </div>
-              {/* Map */}
-              <div className="p-3">
-                <IndiaHeatmap height={310} interactive />
-              </div>
+        {/* ── Floating map card ── */}
+        <div className="relative animate-float order-1 lg:order-2">
+            <div
+              ref={mapWrapRef}
+              className="glow-border rounded-2xl border border-border bg-card p-3 shadow-soft"
+              style={{ minHeight: 520, minWidth: 680 }}
+            >
+              <IndiaHeatmap height={420} interactive scrollable />
             </div>
 
             {/* Floating pill — accuracy */}
@@ -206,25 +200,13 @@ function Hero() {
               </div>
             </div>
 
-            {/* Floating pill — PM2.5 prediction */}
-            <div className="absolute -bottom-5 -right-3 hidden md:block rounded-2xl border border-border/70 bg-white/90 backdrop-blur-md px-4 py-3 shadow-[0_8px_32px_-8px_oklch(0.72_0.19_47_/_0.25)] animate-fade-up animation-delay-3">
-              <p className="text-[10px] text-muted-foreground font-medium">Next 10-hour prediction</p>
-              <p className="text-lg font-extrabold text-primary leading-tight">PM2.5 · 68 μg/m³</p>
-              <div className="mt-1.5 flex items-center gap-2">
-                <Badge className="rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold hover:bg-orange-100 px-2.5">
-                  ⚠ Sensitive Groups
-                </Badge>
-              </div>
-            </div>
-
-            {/* Floating pill — city alert */}
-            <div className="absolute top-1/2 -right-5 -translate-y-1/2 hidden xl:flex items-center gap-2 rounded-xl border border-red-100 bg-red-50/90 backdrop-blur-md px-3 py-2.5 shadow-md animate-fade-up animation-delay-4">
-              <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse shrink-0" />
-              <div>
-                <p className="text-[9px] text-red-500 font-semibold uppercase tracking-wide">Hotspot Alert</p>
-                <p className="text-xs font-bold text-foreground">Delhi · AQI 289</p>
-              </div>
-            </div>
+          {/* PM2.5 pill */}
+          <div className="absolute -bottom-15 right-3 z-50 hidden md:block w-[180px] rounded-xl glass px-3 py-2 shadow-soft animate-fade-up animation-delay-3">
+            <p className="text-[10px] text-muted-foreground leading-none">Next 10-hour prediction</p>
+            <p className="mt-2 right-4 text-sm font-bold text-primary leading-tight">PM2.5 · 68 μg/m³</p>
+            <Badge className="mt-1 rounded-full bg-orange-100 text-orange-700 text-[9px] font-bold hover:bg-orange-100">
+              Sensitive Groups
+            </Badge>
           </div>
 
         </div>
