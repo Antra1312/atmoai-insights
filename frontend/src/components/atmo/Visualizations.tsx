@@ -1,5 +1,10 @@
 import { indianCities, aqiCategory } from "./data";
 
+export function IndiaHeatmap({
+  height = 360,
+  interactive = false,
+}: {
+  height?: number | string;
 type IndiaHeatmapProps = {
   height?: number;
   interactive?: boolean;
