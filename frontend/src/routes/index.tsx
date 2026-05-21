@@ -31,7 +31,7 @@ import {
   TrendingUp,
   CheckCircle2,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // ShadCN UI
 import { Button } from "@/components/ui/button";
@@ -74,6 +74,19 @@ function Landing() {
    §1 – HERO
 ══════════════════════════════════════════════ */
 function Hero() {
+  const mapWrapRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const wrapper = mapWrapRef.current;
+    if (!wrapper) return;
+    // IndiaHeatmap renders a scrollable inner container with class `relative overflow-auto` when `scrollable` is set.
+    const sc = wrapper.querySelector('.relative.overflow-auto') as HTMLElement | null;
+    const el = sc ?? wrapper;
+    const left = Math.max(0, (el.scrollWidth - el.clientWidth) / 2);
+    const top = Math.max(0, (el.scrollHeight - el.clientHeight) / 2);
+    el.scrollTo({ left, top, behavior: 'smooth' });
+  }, []);
+
   return (
     <section
       id="home"
@@ -170,9 +183,13 @@ function Hero() {
 
         {/* ── Floating map card ── */}
         <div className="relative animate-float order-1 lg:order-2">
-          <div className="glow-border rounded-2xl border border-border bg-card p-3 shadow-soft">
-            <IndiaHeatmap height={300} interactive />
-          </div>
+            <div
+              ref={mapWrapRef}
+              className="glow-border rounded-2xl border border-border bg-card p-3 shadow-soft"
+              style={{ minHeight: 520, minWidth: 680 }}
+            >
+              <IndiaHeatmap height={420} interactive scrollable />
+            </div>
 
           {/* Accuracy pill */}
           <div className="absolute -left-4 top-8 hidden md:block rounded-xl glass p-3 shadow-soft animate-fade-up animation-delay-2">
@@ -188,9 +205,9 @@ function Hero() {
           </div>
 
           {/* PM2.5 pill */}
-          <div className="absolute -bottom-4 -right-3 hidden md:block rounded-xl glass p-3 shadow-soft animate-fade-up animation-delay-3">
-            <p className="text-[10px] text-muted-foreground">Next 10-hour prediction</p>
-            <p className="text-base font-bold text-primary">PM2.5 · 68 μg/m³</p>
+          <div className="absolute -bottom-15 right-3 z-50 hidden md:block w-[180px] rounded-xl glass px-3 py-2 shadow-soft animate-fade-up animation-delay-3">
+            <p className="text-[10px] text-muted-foreground leading-none">Next 10-hour prediction</p>
+            <p className="mt-2 right-4 text-sm font-bold text-primary leading-tight">PM2.5 · 68 μg/m³</p>
             <Badge className="mt-1 rounded-full bg-orange-100 text-orange-700 text-[9px] font-bold hover:bg-orange-100">
               Sensitive Groups
             </Badge>
