@@ -124,13 +124,13 @@ function Hero() {
             {/* Headline */}
             <div className="animate-fade-up animation-delay-1 space-y-1">
               <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-[3.5rem] font-extrabold tracking-tight leading-[1.08]">
-                <span className="text-foreground">Breathe Smarter.</span>
+                <span className="text-foreground">Anticipate.</span>
               </h1>
               <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-[3.5rem] font-extrabold tracking-tight leading-[1.08]">
-                <span className="shimmer-text">Predict PM2.5.</span>
+                <span className="shimmer-text">Combat.</span>
               </h1>
               <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-[3.5rem] font-extrabold tracking-tight leading-[1.08] text-foreground/70">
-                Protect India.
+                Protect.
               </h1>
             </div>
 
