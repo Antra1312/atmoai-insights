@@ -3,6 +3,7 @@ import { Navbar } from "@/components/atmo/Navbar";
 import { Footer } from "@/components/atmo/Footer";
 import { IndiaHeatmap, AQIGauge } from "@/components/atmo/Visualizations";
 import { forecast24h, monthly, Card as DataCard } from "@/components/atmo/data";
+import Particles from "@/components/atmo/Particles";
 import {
   AreaChart, Area, BarChart, Bar, ResponsiveContainer,
   XAxis, YAxis, Tooltip, CartesianGrid,
@@ -11,6 +12,7 @@ import {
   Wind, Activity, Map as MapIcon, BellRing, Sparkles,
   ArrowRight, Zap, Github, Linkedin, Twitter,
   ShieldCheck, Navigation2, MessageSquare, TrendingUp,
+  CheckCircle2,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -24,6 +26,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import {
   Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -36,13 +39,33 @@ function Landing() {
   return (
     <TooltipProvider>
       <div className="bg-background font-sans antialiased">
-        <Navbar />
-        <Hero />
-        <Forecasting />
-        <Features />
-        <PlatformPreview />
-        <Contact />
-        <Footer />
+        {/* ── Global Particles background (fixed, behind all sections) ── */}
+        <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+          <Particles
+            particleCount={120}
+            particleSpread={12}
+            speed={0.06}
+            particleColors={["#f97316", "#fb923c", "#fdba74", "#fed7aa", "#fff7ed"]}
+            moveParticlesOnHover={false}
+            alphaParticles
+            particleBaseSize={80}
+            sizeRandomness={1.2}
+            cameraDistance={22}
+            disableRotation={false}
+          />
+        </div>
+
+        {/* Page content sits on top via relative z-10 */}
+        <div className="relative z-10">
+          <Navbar />
+          <Hero />
+          <Forecasting />
+          <Features />
+          <PlatformPreview />
+          <Contact />
+          <Footer />
+        </div>
+
         <Toaster position="bottom-right" richColors />
       </div>
     </TooltipProvider>
@@ -60,18 +83,9 @@ function Hero() {
       style={{ minHeight: "calc(100dvh - 3.5rem)" }}
     >
       {/* Animated blob glows */}
-      <div className="animate-blob absolute -top-40 -right-20 h-[500px] w-[500px] rounded-full bg-orange-300/20 blur-3xl pointer-events-none" />
-      <div className="animate-blob animation-delay-blob absolute -bottom-40 -left-20 h-[400px] w-[400px] rounded-full bg-amber-200/20 blur-3xl pointer-events-none" />
+      <div className="animate-blob absolute -top-40 -right-20 h-[500px] w-[500px] rounded-full bg-orange-300/10 blur-3xl pointer-events-none" />
+      <div className="animate-blob animation-delay-blob absolute -bottom-40 -left-20 h-[400px] w-[400px] rounded-full bg-amber-200/10 blur-3xl pointer-events-none" />
 
-      {/* Dot grid — tiny 1px dots */}
-      <div
-        className="absolute inset-0 opacity-[0.06] pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, oklch(0.3 0.02 250) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
 
       <div className="relative w-full mx-auto max-w-7xl px-4 sm:px-6 py-12 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         {/* ── Copy ── */}
