@@ -6,12 +6,12 @@
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-// Build as a client-only SPA: do not generate the server bundle.
-// The default config from @lovable.dev/vite-tanstack-config includes TanStack Start
-// plugins — we override only the tanstackStart.server option to false so the
-// build produces a regular client `dist` output (index.html + assets).
+// Provide a valid object for tanstackStart.server to satisfy the plugin Zod schema.
+// An empty object will prevent the earlier ZodError (`expected object, received boolean`)
+// while keeping the TanStack Start defaults for development. The project is already
+// configured for static SPA deployment on Vercel via frontend/vercel.json.
 export default defineConfig({
   tanstackStart: {
-    server: false,
+    server: {},
   },
 });
