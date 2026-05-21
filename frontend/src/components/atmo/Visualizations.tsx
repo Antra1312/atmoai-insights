@@ -4,7 +4,7 @@ export function IndiaHeatmap({
   height = 360,
   interactive = false,
 }: {
-  height?: number;
+  height?: number | string;
   interactive?: boolean;
 }) {
   // Approximate bounding box of the physical map image

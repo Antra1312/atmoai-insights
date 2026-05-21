@@ -8,9 +8,9 @@ export function Logo({ className = "" }: { className?: string }) {
         alt="AtmoAI Air Intelligence"
         className="h-14 w-auto select-none object-contain sm:h-16"
       />
-      <span className="flex flex-col leading-none">
-        <span className="text-lg font-bold tracking-tight text-foreground sm:text-xl">AtmoAI</span>
-        <span className="text-[9px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:text-[10px] whitespace-nowrap">
+      <span className="flex flex-col leading-none overflow-hidden">
+        <span className="text-lg font-bold tracking-tight text-foreground sm:text-xl truncate">AtmoAI</span>
+        <span className="text-[9px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:text-[10px] truncate">
           {"predict\u00A0prevent\u00A0protect"}
         </span>
       </span>

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Search, MapPin, Activity, Wind, Filter } from "lucide-react";
+import { IndiaHeatmap } from "@/components/atmo/Visualizations";
 
 export const Route = createFileRoute("/app/admin/explorer")({ component: AdminExplorer });
 
@@ -69,33 +70,8 @@ function AdminExplorer() {
              </div>
           </div>
 
-          <div className="flex-1 w-full h-full bg-[#f8fafc] relative overflow-hidden flex items-center justify-center">
-            {/* SVG Heatmap Implementation */}
-            <svg viewBox="0 0 800 800" className="w-full h-full max-h-[800px] opacity-90 drop-shadow-xl p-10">
-              {/* Abstracted India SVG Path (Simplified placeholder for the real SVG) */}
-              <g stroke="white" strokeWidth="2" strokeLinejoin="round">
-                <path d="M250,150 L300,50 L350,100 L400,80 L450,120 L550,200 L650,250 L750,300 L700,400 L650,550 L500,750 L450,780 L400,750 L300,600 L200,450 L100,350 L150,250 Z" fill="#F1F5F9" />
-                
-                {/* State approximations colored by AQI */}
-                <path d="M300,50 L350,100 L300,150 Z" fill="#F59E0B" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* JK/Ladakh */}
-                <path d="M300,150 L350,100 L400,150 L350,200 Z" fill="#EF4444" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* Delhi/Haryana */}
-                <path d="M350,200 L400,150 L500,250 L450,300 Z" fill="#9333EA" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* UP */}
-                <path d="M200,300 L300,150 L350,200 L250,350 Z" fill="#F97316" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* Rajasthan */}
-                <path d="M200,450 L250,350 L350,400 L300,500 Z" fill="#F59E0B" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* Gujarat/MH */}
-                <path d="M350,400 L450,300 L550,400 L450,500 Z" fill="#F59E0B" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* MP */}
-                <path d="M300,500 L450,500 L400,650 L350,600 Z" fill="#10B981" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* Karnataka/Kerala */}
-                <path d="M400,650 L450,500 L550,550 L450,750 Z" fill="#10B981" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* TN/AP */}
-                <path d="M500,250 L650,250 L600,400 L550,350 Z" fill="#F97316" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* Bihar/Bengal */}
-                <path d="M650,250 L750,300 L700,400 L600,350 Z" fill="#10B981" className="hover:opacity-80 transition-opacity cursor-pointer" /> {/* NE */}
-              </g>
-
-              {/* Data points */}
-              <circle cx="350" cy="180" r="15" fill="#9333EA" className="animate-pulse" />
-              <circle cx="450" cy="250" r="12" fill="#EF4444" className="animate-pulse" />
-              <circle cx="280" cy="380" r="8" fill="#F97316" />
-              <circle cx="380" cy="580" r="8" fill="#10B981" />
-              <circle cx="620" cy="300" r="10" fill="#F97316" />
-            </svg>
+          <div className="flex-1 w-full h-full bg-[#f8fafc] relative flex items-center justify-center p-4">
+            <IndiaHeatmap height="100%" interactive />
           </div>
         </div>
 
