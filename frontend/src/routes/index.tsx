@@ -2,94 +2,176 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/atmo/Navbar";
 import { Footer } from "@/components/atmo/Footer";
 import { IndiaHeatmap, AQIGauge } from "@/components/atmo/Visualizations";
-import { forecast24h, monthly, StatCard, Card } from "@/components/atmo/data";
+import { forecast24h, monthly, Card as DataCard } from "@/components/atmo/data";
 import {
-  LineChart, Line, AreaChart, Area, BarChart, Bar, ResponsiveContainer,
+  AreaChart, Area, BarChart, Bar, ResponsiveContainer,
   XAxis, YAxis, Tooltip, CartesianGrid,
 } from "recharts";
 import {
-  Wind, Activity, Map as MapIcon, TrendingUp, BellRing, Sparkles,
-  ArrowRight, Globe2, Target, Users, Zap, Github, Linkedin, Twitter,
+  Wind, Activity, Map as MapIcon, BellRing, Sparkles,
+  ArrowRight, Zap, Github, Linkedin, Twitter,
+  ShieldCheck, Navigation2, MessageSquare, TrendingUp,
+  CheckCircle2,
 } from "lucide-react";
+import { useState } from "react";
+
+// ShadCN UI
+import { Button } from "@/components/ui/button";
+import {
+  Card, CardContent, CardHeader, CardTitle, CardDescription,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({ component: Landing });
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <Hero />
-      <Stats />
-      <Features />
-      <Preview />
-      <About />
-      <Team />
-      <CTA />
-      <Footer />
-    </div>
+    <TooltipProvider>
+      <div className="bg-background font-sans antialiased">
+        <Navbar />
+        <Hero />
+        <Forecasting />
+        <Features />
+        <PlatformPreview />
+        <Contact />
+        <Footer />
+        <Toaster position="bottom-right" richColors />
+      </div>
+    </TooltipProvider>
   );
 }
 
+/* ══════════════════════════════════════════════
+   §1 – HERO
+══════════════════════════════════════════════ */
 function Hero() {
   return (
-    <section id="home" className="relative overflow-hidden">
-      <div className="absolute inset-0 grid-bg opacity-50" />
-      <div className="absolute -top-40 right-0 h-[500px] w-[500px] rounded-full bg-primary/20 blur-3xl" />
-      <div className="absolute -bottom-40 left-0 h-[400px] w-[400px] rounded-full bg-secondary/30 blur-3xl" />
+    <section
+      id="home"
+      className="relative overflow-hidden flex items-center"
+      style={{ minHeight: "calc(100dvh - 3.5rem)" }}
+    >
+      {/* Animated blob glows */}
+      <div className="animate-blob absolute -top-40 -right-20 h-[500px] w-[500px] rounded-full bg-orange-300/20 blur-3xl pointer-events-none" />
+      <div className="animate-blob animation-delay-blob absolute -bottom-40 -left-20 h-[400px] w-[400px] rounded-full bg-amber-200/20 blur-3xl pointer-events-none" />
 
-      <div className="relative mx-auto grid max-w-7xl gap-12 px-6 pb-24 pt-20 lg:grid-cols-2 lg:gap-8 lg:pt-28">
-        <div className="flex flex-col justify-center">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary">
-            <Sparkles className="h-3.5 w-3.5" />
-            Powered by Deep Learning · LSTM + Transformer
+      {/* Dot grid — tiny 1px dots */}
+      <div
+        className="absolute inset-0 opacity-[0.06] pointer-events-none"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, oklch(0.3 0.02 250) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+
+      <div className="relative w-full mx-auto max-w-7xl px-4 sm:px-6 py-12 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        {/* ── Copy ── */}
+        <div className="flex flex-col gap-5 order-2 lg:order-1">
+          {/* Animated badge */}
+          <div className="animate-fade-up animate-pulse-badge">
+            <Badge
+              variant="outline"
+              className="w-fit gap-1.5 rounded-full border-orange-200 bg-orange-50 px-3 py-1.5 text-[11px] font-semibold text-orange-600 shadow-sm"
+            >
+              <Sparkles className="h-3 w-3" />
+              Powered by Deep Learning · LSTM + Transformer
+            </Badge>
           </div>
-          <h1 className="mt-6 text-5xl font-bold tracking-tight text-foreground text-balance lg:text-6xl">
-            Predict Future Air Quality with{" "}
-            <span className="bg-gradient-to-r from-primary to-orange-400 bg-clip-text text-transparent">
-              AI-Powered PM2.5
-            </span>{" "}
-            Forecasting
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-            Monitor pollution trends, forecast PM2.5 concentrations, and make data-driven environmental decisions across 190+ countries using machine learning.
+
+          {/* Headline with shimmer accent */}
+          <div className="animate-fade-up animation-delay-1">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-bold tracking-tight text-foreground leading-[1.12]">
+              Predict Future Air Quality with{" "}
+              <span className="shimmer-text">AI-Powered PM2.5 Forecasting</span>
+            </h1>
+          </div>
+
+          <p className="animate-fade-up animation-delay-2 text-sm sm:text-base leading-relaxed text-muted-foreground max-w-lg">
+            Over{" "}
+            <strong className="text-foreground font-semibold">1.67 million deaths</strong>{" "}
+            in India are attributed to Air Pollution annually, causing an economic loss of approximately{" "}
+            <strong className="text-foreground font-semibold">1.36% of India's GDP</strong>.
+            AtmoAI leverages scientific machine learning to track, analyze, and forecast hazardous
+            PM2.5 concentrations before they threaten public health.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/app/dashboard" className="group inline-flex items-center gap-2 rounded-2xl gradient-primary px-6 py-3 text-sm font-semibold text-white shadow-glow transition hover:opacity-95">
-              Explore Dashboard
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-            </Link>
-            <Link to="/app/dashboard/pollution" className="inline-flex items-center gap-2 rounded-2xl border border-border bg-background px-6 py-3 text-sm font-semibold text-foreground transition hover:border-primary hover:text-primary">
-              View Forecasts
-            </Link>
+
+          {/* CTA buttons */}
+          <div className="animate-fade-up animation-delay-3 flex flex-wrap gap-3 pt-1">
+            <Button
+              asChild
+              size="lg"
+              className="rounded-xl gradient-primary text-white shadow-glow hover:opacity-90 transition-all active:scale-95 gap-2"
+            >
+              <Link to="/app/dashboard">
+                Explore Dashboard
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="rounded-xl border-border hover:border-primary hover:text-primary transition-all active:scale-95"
+            >
+              <Link to="/app/dashboard/pollution">View Forecasts</Link>
+            </Button>
           </div>
-          <div className="mt-10 flex items-center gap-6 text-xs text-muted-foreground">
+
+          {/* Trust row */}
+          <div className="animate-fade-up animation-delay-4 flex flex-wrap items-center gap-4 pt-2">
             <div className="flex -space-x-2">
-              {["bg-orange-400","bg-amber-400","bg-emerald-400","bg-rose-400"].map((c,i)=>(
-                <div key={i} className={`h-8 w-8 rounded-full border-2 border-background ${c}`} />
+              {["bg-orange-400", "bg-amber-400", "bg-emerald-400", "bg-rose-400"].map((c, i) => (
+                <div key={i} className={`h-7 w-7 rounded-full border-2 border-background ${c} shadow-sm`} />
               ))}
             </div>
-            <p>Trusted by <span className="font-semibold text-foreground">10,000+</span> researchers & agencies</p>
+            <span className="text-xs text-muted-foreground">
+              Trusted by <strong className="text-foreground">10,000+</strong> researchers &amp; agencies
+            </span>
+            <Separator orientation="vertical" className="h-4 hidden sm:block" />
+            <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              <span>Open-source &amp; peer-reviewed</span>
+            </div>
           </div>
         </div>
 
-        <div className="relative">
-          <div className="relative rounded-3xl border border-border bg-card p-4 shadow-soft">
-            <IndiaHeatmap height={420} interactive />
+        {/* ── Floating map card ── */}
+        <div className="relative animate-float order-1 lg:order-2">
+          <div className="glow-border rounded-2xl border border-border bg-card p-3 shadow-soft">
+            <IndiaHeatmap height={300} interactive />
           </div>
-          {/* Floating cards */}
-          <div className="absolute -left-6 top-12 hidden rounded-2xl glass p-4 shadow-soft md:block">
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-100 text-emerald-700"><Activity className="h-5 w-5"/></div>
+
+          {/* Accuracy pill */}
+          <div className="absolute -left-4 top-8 hidden md:block rounded-xl glass p-3 shadow-soft animate-fade-up animation-delay-2">
+            <div className="flex items-center gap-2">
+              <div className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-100 text-emerald-700">
+                <Activity className="h-4 w-4" />
+              </div>
               <div>
-                <p className="text-xs text-muted-foreground">Forecast Accuracy</p>
-                <p className="text-lg font-bold">94.7%</p>
+                <p className="text-[10px] text-muted-foreground">Forecast Accuracy</p>
+                <p className="text-sm font-bold text-foreground">94.7%</p>
               </div>
             </div>
           </div>
-          <div className="absolute -bottom-6 -right-4 hidden rounded-2xl glass p-4 shadow-soft md:block">
-            <p className="text-xs text-muted-foreground">Next 24h prediction</p>
-            <p className="text-2xl font-bold text-primary">PM2.5 · 68 μg/m³</p>
-            <div className="mt-1 inline-flex rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-orange-700">Sensitive Groups</div>
+
+          {/* PM2.5 pill */}
+          <div className="absolute -bottom-4 -right-3 hidden md:block rounded-xl glass p-3 shadow-soft animate-fade-up animation-delay-3">
+            <p className="text-[10px] text-muted-foreground">Next 10-hour prediction</p>
+            <p className="text-base font-bold text-primary">PM2.5 · 68 μg/m³</p>
+            <Badge className="mt-1 rounded-full bg-orange-100 text-orange-700 text-[9px] font-bold hover:bg-orange-100">
+              Sensitive Groups
+            </Badge>
           </div>
         </div>
       </div>
@@ -97,57 +179,154 @@ function Hero() {
   );
 }
 
-function Stats() {
-  const items = [
-    { label: "Countries Monitored", value: "190+", icon: <Globe2 className="h-5 w-5"/> },
-    { label: "Forecast Accuracy", value: "94.7%", icon: <Target className="h-5 w-5"/> },
-    { label: "Active Users", value: "12.4K", icon: <Users className="h-5 w-5"/> },
-    { label: "Daily Predictions", value: "2.8M", icon: <Zap className="h-5 w-5"/> },
+/* ══════════════════════════════════════════════
+   §2 – FORECASTING
+══════════════════════════════════════════════ */
+function Forecasting() {
+  const objectives = [
+    {
+      icon: <Zap className="h-5 w-5" />,
+      heading: "10-Hour Forecast Horizon",
+      text: "Predicting dynamic PM2.5 distribution patterns using historical meteorological and pollution datasets fused through LSTM + Transformer architectures.",
+      color: "from-orange-500/10 to-amber-500/5",
+      iconBg: "gradient-primary",
+    },
+    {
+      icon: <MapIcon className="h-5 w-5" />,
+      heading: "Hotspot Tracking",
+      text: "Identifying exactly where severe pollution zones will emerge across the Indian map, enabling precise location-level early intervention and routing.",
+      color: "from-red-500/10 to-rose-500/5",
+      iconBg: "bg-red-500",
+    },
+    {
+      icon: <BellRing className="h-5 w-5" />,
+      heading: "Early Warnings",
+      text: "Providing data-driven insights to actively support public-health interventions, government policy responses, and community safety programmes.",
+      color: "from-teal-500/10 to-emerald-500/5",
+      iconBg: "bg-teal-600",
+    },
   ];
+
+  const stats = [
+    { v: "10h",   l: "Forecast Horizon" },
+    { v: "94.7%", l: "Model Accuracy" },
+    { v: "12+",   l: "Indian Cities" },
+    { v: "1.67M", l: "Lives at Risk / Yr" },
+  ];
+
   return (
-    <section className="border-y border-border bg-[var(--color-surface)] py-14">
-      <div className="mx-auto grid max-w-7xl gap-6 px-6 md:grid-cols-4">
-        {items.map((s) => (
-          <div key={s.label} className="flex items-center gap-4">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl gradient-primary text-white shadow-glow">{s.icon}</div>
-            <div>
-              <p className="text-3xl font-bold tracking-tight text-foreground">{s.value}</p>
-              <p className="text-xs font-medium text-muted-foreground">{s.label}</p>
-            </div>
-          </div>
-        ))}
+    <section
+      id="forecasting"
+      className="flex items-center border-t border-border bg-gradient-to-b from-orange-50/50 to-background"
+      style={{ minHeight: "100dvh" }}
+    >
+      <div className="w-full mx-auto max-w-7xl px-4 sm:px-6 py-12">
+        {/* Header */}
+        <div className="mx-auto max-w-2xl text-center mb-10">
+          <Badge variant="outline" className="mb-3 rounded-full border-primary/30 bg-primary/5 text-primary text-[11px] font-semibold tracking-widest uppercase">
+            Core Objectives
+          </Badge>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+            Forecasting PM2.5 Across India
+          </h2>
+          <blockquote className="mt-4 text-sm sm:text-base text-muted-foreground italic border-l-2 border-primary/40 pl-4 text-left mx-auto max-w-xl rounded-r-lg bg-orange-50/50 py-3 pr-3">
+            "To design scientific machine learning models that can accurately forecast
+            short-term PM2.5 concentration fields over India."
+          </blockquote>
+        </div>
+
+        {/* Objective cards */}
+        <div className="grid gap-5 grid-cols-1 sm:grid-cols-3 mb-8">
+          {objectives.map(({ icon, heading, text, color, iconBg }, idx) => (
+            <Card key={heading} className={`card-hover border-border bg-gradient-to-br ${color} overflow-hidden animate-fade-up animation-delay-${idx + 1}`}>
+              <CardHeader className="pb-3">
+                <div className={`grid h-11 w-11 place-items-center rounded-xl ${iconBg} text-white shadow-glow mb-3`}>
+                  {icon}
+                </div>
+                <CardTitle className="text-base">{heading}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-xs sm:text-sm leading-relaxed">{text}</CardDescription>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {stats.map((s, i) => (
+            <Card key={s.l} className={`card-hover text-center border-border animate-fade-up animation-delay-${i + 4}`}>
+              <CardContent className="pt-5 pb-5">
+                <p className="text-2xl sm:text-3xl font-bold text-primary">{s.v}</p>
+                <p className="mt-1 text-[11px] sm:text-xs text-muted-foreground">{s.l}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
+/* ══════════════════════════════════════════════
+   §3 – FEATURES
+══════════════════════════════════════════════ */
 function Features() {
   const items = [
-    { icon: Wind, title: "PM2.5 Forecasting", desc: "ML models predict concentrations up to 30 days ahead with confidence intervals." },
-    { icon: Activity, title: "Air Quality Monitoring", desc: "Real-time AQI, PM2.5, PM10, NO₂, SO₂ and O₃ tracked across 190 countries." },
-    { icon: MapIcon, title: "Interactive AQI Maps", desc: "Global heatmaps with country drill-down, pollution hotspots and live markers." },
-    { icon: TrendingUp, title: "Historical Trends", desc: "Decade-long historical analytics with monthly and seasonal comparisons." },
-    { icon: BellRing, title: "Smart Alerts", desc: "Customizable thresholds with email and push notifications for sensitive groups." },
-    { icon: Sparkles, title: "AI Insights", desc: "Explainable predictions powered by weather, seasonality and meteorological features." },
+    { icon: <Wind />,         title: "PM2.5 Forecasting",        desc: "ML models predict PM2.5 concentration fields up to 10 hours ahead using historical meteorological and pollutant datasets across Indian regions.", accent: "text-orange-500 bg-orange-500/10" },
+    { icon: <MapIcon />,       title: "Interactive Pollution Maps", desc: "Live, responsive heatmaps showcasing localised pollution spreads across Indian cities, overlaid on an accurate India physical map.",        accent: "text-blue-500 bg-blue-500/10" },
+    { icon: <BellRing />,      title: "Emerging Hotspot Alerts",   desc: "Real-time identification and concise descriptions of rapidly deteriorating local air quality zones before they reach hazardous thresholds.",    accent: "text-red-500 bg-red-500/10" },
+    { icon: <Navigation2 />,   title: "Nearest Safe Zone",         desc: "Smart geographical routing recommendations that guide users toward the closest clean-air locations based on live pollution data.",               accent: "text-teal-500 bg-teal-500/10" },
+    { icon: <ShieldCheck />,   title: "Health Risk Assessment",    desc: "Personalised impact alerts and tailored safety guidance based on sensitive group vulnerabilities — children, elderly, and respiratory patients.", accent: "text-emerald-500 bg-emerald-500/10" },
+    { icon: <MessageSquare />, title: "Civics & Trend Analytics",  desc: "An integrated feedback and pollution-complaint system combined with deep historical trend analysis tools for civic reporting.",               accent: "text-purple-500 bg-purple-500/10" },
   ];
+
   return (
-    <section id="features" className="py-24">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Features</p>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight text-foreground text-balance">Everything you need to understand the air around you</h2>
-          <p className="mt-4 text-muted-foreground">A modern intelligence layer for environmental data — built on top of EPA, OpenAQ and satellite observations.</p>
+    <section
+      id="features"
+      className="flex items-center border-t border-border"
+      style={{ minHeight: "100dvh" }}
+    >
+      <div className="w-full mx-auto max-w-7xl px-4 sm:px-6 py-12">
+        {/* Header */}
+        <div className="mx-auto max-w-2xl text-center mb-10">
+          <Badge variant="outline" className="mb-3 rounded-full border-primary/30 bg-primary/5 text-primary text-[11px] font-semibold tracking-widest uppercase">
+            Features
+          </Badge>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+            Everything you need to understand{" "}
+            <span className="text-primary">the air around you</span>
+          </h2>
+          <p className="mt-3 text-sm text-muted-foreground">
+            A modern intelligence layer for environmental data — built for India's unique climate and pollution patterns.
+          </p>
         </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {items.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="group relative overflow-hidden rounded-2xl border border-border bg-card p-7 shadow-card transition hover:-translate-y-1 hover:shadow-soft">
-              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary/5 blur-2xl transition group-hover:bg-primary/15" />
-              <div className="relative grid h-12 w-12 place-items-center rounded-2xl gradient-primary text-white shadow-glow">
-                <Icon className="h-6 w-6" />
-              </div>
-              <h3 className="relative mt-5 text-lg font-semibold text-foreground">{title}</h3>
-              <p className="relative mt-2 text-sm text-muted-foreground">{desc}</p>
-            </div>
+
+        {/* 3×2 grid */}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map(({ icon, title, desc, accent }, idx) => (
+            <TooltipProvider key={title}>
+              <UITooltip>
+                <TooltipTrigger asChild>
+                  <Card className={`card-hover group cursor-default border-border relative overflow-hidden animate-fade-up animation-delay-${idx + 1}`}>
+                    {/* Hover shimmer overlay */}
+                    <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                    <CardHeader className="pb-2">
+                      <div className={`grid h-10 w-10 place-items-center rounded-xl ${accent} mb-3 transition-transform duration-300 group-hover:scale-110`}>
+                        {icon}
+                      </div>
+                      <CardTitle className="text-sm sm:text-base">{title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-xs sm:text-sm leading-relaxed">{desc}</CardDescription>
+                    </CardContent>
+                  </Card>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="text-xs max-w-[220px]">
+                  {desc}
+                </TooltipContent>
+              </UITooltip>
+            </TooltipProvider>
           ))}
         </div>
       </div>
@@ -155,136 +334,244 @@ function Features() {
   );
 }
 
-function Preview() {
+/* ══════════════════════════════════════════════
+   §4 – PLATFORM PREVIEW
+══════════════════════════════════════════════ */
+function PlatformPreview() {
   return (
-    <section id="forecasting" className="bg-[var(--color-surface)] py-24">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Platform Preview</p>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight text-foreground">A control room for planetary air quality</h2>
+    <section
+      id="preview"
+      className="flex items-center border-t border-border bg-gradient-to-b from-background to-orange-50/30"
+      style={{ minHeight: "100dvh" }}
+    >
+      <div className="w-full mx-auto max-w-7xl px-4 sm:px-6 py-12">
+        <div className="mx-auto max-w-2xl text-center mb-8">
+          <Badge variant="outline" className="mb-3 rounded-full border-primary/30 bg-primary/5 text-primary text-[11px] font-semibold tracking-widest uppercase">
+            Platform Preview
+          </Badge>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+            A control room for India's air quality
+          </h2>
         </div>
-        <div className="mt-12 rounded-3xl border border-border bg-card p-6 shadow-soft">
-          <div className="grid gap-6 lg:grid-cols-3">
-            <Card title="Current AQI" subtitle="New Delhi, India" className="flex flex-col items-center">
-              <AQIGauge value={168} />
+
+        <Card className="border-border shadow-soft p-2 sm:p-4">
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
+            {/* AQI Gauge */}
+            <Card className="border-border bg-card">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Current AQI</CardTitle>
+                <CardDescription className="text-xs">New Delhi, India</CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-center">
+                <AQIGauge value={168} />
+              </CardContent>
             </Card>
-            <Card title="24-Hour PM2.5 Forecast" subtitle="μg/m³ · LSTM model" className="lg:col-span-2">
-              <ResponsiveContainer width="100%" height={220}>
-                <AreaChart data={forecast24h}>
-                  <defs>
-                    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#F97316" stopOpacity={0.4}/>
-                      <stop offset="100%" stopColor="#F97316" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.93 0.01 250)" vertical={false}/>
-                  <XAxis dataKey="time" stroke="oklch(0.5 0.02 250)" fontSize={11} interval={3}/>
-                  <YAxis stroke="oklch(0.5 0.02 250)" fontSize={11}/>
-                  <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid oklch(0.93 0.01 250)' }}/>
-                  <Area type="monotone" dataKey="predicted" stroke="#F97316" strokeWidth={2.5} fill="url(#g1)"/>
-                  <Line type="monotone" dataKey="pm25" stroke="#FDBA74" strokeWidth={2} dot={false}/>
-                </AreaChart>
-              </ResponsiveContainer>
+
+            {/* Forecast Area Chart */}
+            <Card className="border-border bg-card lg:col-span-2">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">10-Hour PM2.5 Forecast</CardTitle>
+                <CardDescription className="text-xs">μg/m³ · LSTM model</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={170}>
+                  <AreaChart data={forecast24h.slice(0, 10)}>
+                    <defs>
+                      <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#F97316" stopOpacity={0.4} />
+                        <stop offset="100%" stopColor="#F97316" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.93 0.01 250)" vertical={false} />
+                    <XAxis dataKey="time" stroke="oklch(0.5 0.02 250)" fontSize={10} />
+                    <YAxis stroke="oklch(0.5 0.02 250)" fontSize={10} />
+                    <Tooltip contentStyle={{ borderRadius: 10, border: "1px solid oklch(0.93 0.01 250)", fontSize: 11 }} />
+                    <Area type="monotone" dataKey="predicted" stroke="#F97316" strokeWidth={2} fill="url(#g1)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </CardContent>
             </Card>
-            <Card title="India Pollution Heatmap" className="lg:col-span-2">
-              <IndiaHeatmap height={300} interactive/>
+
+            {/* India Heatmap */}
+            <Card className="border-border bg-card lg:col-span-2">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">India AQI Heatmap</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <IndiaHeatmap height={200} interactive />
+              </CardContent>
             </Card>
-            <Card title="Monthly Comparison" subtitle="2025 vs 2024">
-              <ResponsiveContainer width="100%" height={220}>
-                <BarChart data={monthly}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.93 0.01 250)" vertical={false}/>
-                  <XAxis dataKey="month" stroke="oklch(0.5 0.02 250)" fontSize={10}/>
-                  <YAxis stroke="oklch(0.5 0.02 250)" fontSize={10}/>
-                  <Tooltip contentStyle={{ borderRadius: 12 }}/>
-                  <Bar dataKey="last" fill="#FDBA74" radius={[6,6,0,0]}/>
-                  <Bar dataKey="pm25" fill="#F97316" radius={[6,6,0,0]}/>
-                </BarChart>
-              </ResponsiveContainer>
+
+            {/* Monthly Bar */}
+            <Card className="border-border bg-card">
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-sm">Monthly Comparison</CardTitle>
+                    <CardDescription className="text-xs">2025 vs 2024</CardDescription>
+                  </div>
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={170}>
+                  <BarChart data={monthly}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.93 0.01 250)" vertical={false} />
+                    <XAxis dataKey="month" stroke="oklch(0.5 0.02 250)" fontSize={9} />
+                    <YAxis stroke="oklch(0.5 0.02 250)" fontSize={9} />
+                    <Tooltip contentStyle={{ borderRadius: 10, fontSize: 11 }} />
+                    <Bar dataKey="last" fill="#FDBA74" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="pm25" fill="#F97316" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
             </Card>
           </div>
-        </div>
+        </Card>
       </div>
     </section>
   );
 }
 
-function About() {
-  return (
-    <section id="about" className="py-24">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-2">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">About AtmoAI</p>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight text-foreground text-balance">Built for a generation that breathes cleaner air</h2>
-          <p className="mt-5 text-muted-foreground">
-            Air pollution causes 7 million premature deaths globally each year. AtmoAI exists to make air-quality intelligence accessible to governments, researchers and citizens — so we can act before the air becomes unbreathable.
-          </p>
-          <p className="mt-4 text-muted-foreground">
-            Our forecasting engine combines historical PM2.5 data, meteorological signals, satellite imagery and country-level emissions inventories through an ensemble of LSTM and Transformer models.
-          </p>
-          <div className="mt-8 grid grid-cols-3 gap-4">
-            {[{n:"7M", l:"deaths/yr from pollution"},{n:"90%", l:"of humans breathe polluted air"},{n:"30d", l:"forecast horizon"}].map(s=>(
-              <div key={s.l} className="rounded-2xl border border-border bg-card p-4">
-                <p className="text-2xl font-bold text-primary">{s.n}</p>
-                <p className="mt-1 text-[11px] text-muted-foreground">{s.l}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="relative rounded-3xl border border-border bg-gradient-to-br from-orange-50 to-amber-50 p-8 shadow-soft">
-          <IndiaHeatmap height={360}/>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Team() {
+/* ══════════════════════════════════════════════
+   §5 – CONTACT  (Team + Form)
+══════════════════════════════════════════════ */
+function Contact() {
   const team = [
-    { name: "Chrisha Dabhi", role: "ML Engineer", init: "CD" },
-    { name: "Antra Gajjar", role: "Full-Stack Developer", init: "AG" },
-    { name: "Pragati Varu", role: "Data Scientist", init: "PV" },
+    { name: "Dabhi Chrisha Manish", role: "Team Leader",  photo: "/chrisha.JPG", init: "DC", color: "from-orange-400 to-amber-500" },
+    { name: "Gajjar Antra",         role: "Team Member",  photo: "/antra.jpg",   init: "GA", color: "from-rose-400 to-pink-500" },
+    { name: "Varu Pragati",          role: "Team Member",  photo: "/pragati.jpg", init: "VP", color: "from-teal-400 to-emerald-500" },
   ];
+
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Report received!", {
+      description: "Our team will review your submission shortly.",
+    });
+    setForm({ name: "", email: "", message: "" });
+  };
+
   return (
-    <section className="bg-[var(--color-surface)] py-24">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Team</p>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight text-foreground">The minds behind AtmoAI</h2>
+    <section
+      id="contact"
+      className="flex items-start border-t border-border"
+      style={{ minHeight: "100dvh" }}
+    >
+      <div className="w-full mx-auto max-w-7xl px-4 sm:px-6 py-12">
+
+        {/* ── Team ── */}
+        <div className="text-center mb-8">
+          <Badge variant="outline" className="mb-3 rounded-full border-primary/30 bg-primary/5 text-primary text-[11px] font-semibold tracking-widest uppercase">
+            Our Team
+          </Badge>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+            The minds behind AtmoAI
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            A dedicated group of researchers and engineers building the future of air-quality intelligence for India.
+          </p>
         </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {team.map(t=>(
-            <div key={t.name} className="group rounded-3xl border border-border bg-card p-8 text-center shadow-card transition hover:-translate-y-1 hover:shadow-soft">
-              <div className="mx-auto grid h-24 w-24 place-items-center rounded-full gradient-primary text-2xl font-bold text-white shadow-glow">{t.init}</div>
-              <h3 className="mt-5 text-lg font-semibold text-foreground">{t.name}</h3>
-              <p className="text-sm text-primary">{t.role}</p>
-              <div className="mt-4 flex justify-center gap-2">
-                {[Github, Linkedin, Twitter].map((I,i)=>(
-                  <a key={i} href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border text-muted-foreground transition hover:border-primary hover:text-primary">
-                    <I className="h-4 w-4"/>
-                  </a>
-                ))}
-              </div>
-            </div>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 max-w-4xl mx-auto mb-12">
+          {team.map((t, idx) => (
+            <Card key={t.name} className={`card-hover border-border text-center animate-fade-up animation-delay-${idx + 1}`}>
+              <CardContent className="pt-8 pb-6 flex flex-col items-center gap-3">
+                <Avatar className={`h-24 w-24 ring-4 bg-gradient-to-br ${t.color} ring-primary/15 shadow-md`}>
+                  <AvatarImage src={t.photo} alt={t.name} className="object-cover object-top" />
+                  <AvatarFallback className={`text-xl font-bold text-white bg-gradient-to-br ${t.color}`}>
+                    {t.init}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-sm sm:text-base font-semibold text-foreground leading-tight">{t.name}</h3>
+                  <p className="mt-0.5 text-xs sm:text-sm font-medium text-primary">{t.role}</p>
+                </div>
+                <div className="flex justify-center gap-2 pt-1">
+                  {[
+                    { Icon: Github,   label: "GitHub" },
+                    { Icon: Linkedin, label: "LinkedIn" },
+                    { Icon: Twitter,  label: "Twitter" },
+                  ].map(({ Icon, label }) => (
+                    <UITooltip key={label}>
+                      <TooltipTrigger asChild>
+                        <Button asChild variant="outline" size="icon" className="h-8 w-8 rounded-lg border-border hover:border-primary hover:text-primary">
+                          <a href="#" aria-label={label}>
+                            <Icon className="h-3.5 w-3.5" />
+                          </a>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="text-xs">{label}</TooltipContent>
+                    </UITooltip>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
 
-function CTA() {
-  return (
-    <section className="py-24">
-      <div className="mx-auto max-w-5xl px-6">
-        <div className="relative overflow-hidden rounded-3xl gradient-primary p-12 text-center shadow-glow">
-          <div className="absolute inset-0 grid-bg opacity-20" />
-          <h2 className="relative text-4xl font-bold tracking-tight text-white text-balance">Ready to forecast the air your country breathes?</h2>
-          <p className="relative mx-auto mt-4 max-w-xl text-white/90">Start with our free tier — 1,000 forecasts per month, no credit card required.</p>
-          <div className="relative mt-8 flex flex-wrap justify-center gap-3">
-            <Link to="/signup" className="rounded-2xl bg-white px-6 py-3 text-sm font-bold text-primary shadow-lg hover:bg-white/90">Create free account</Link>
-            <Link to="/app/dashboard" className="rounded-2xl border border-white/30 px-6 py-3 text-sm font-bold text-white hover:bg-white/10">Open dashboard</Link>
+        <Separator className="my-8 max-w-4xl mx-auto" />
+
+        {/* ── Form ── */}
+        <div className="mx-auto max-w-xl">
+          <div className="text-center mb-6">
+            <Badge variant="outline" className="mb-3 rounded-full border-primary/30 bg-primary/5 text-primary text-[11px] font-semibold tracking-widest uppercase">
+              Get Involved
+            </Badge>
+            <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+              Submit Feedback or Report Pollution
+            </h3>
+            <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
+              Help us improve forecasting accuracy or report severe localised pollution incidents directly to our team.
+            </p>
           </div>
+
+          <Card className="border-border shadow-soft">
+            <CardContent className="pt-6">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="f-name" className="text-xs font-medium">Full Name</Label>
+                    <Input
+                      id="f-name" type="text" required placeholder="Chrisha Dabhi"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      className="rounded-xl border-border focus-visible:ring-primary/30 text-sm"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="f-email" className="text-xs font-medium">Email Address</Label>
+                    <Input
+                      id="f-email" type="email" required placeholder="you@example.com"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      className="rounded-xl border-border focus-visible:ring-primary/30 text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="f-msg" className="text-xs font-medium">Message / Incident Description</Label>
+                  <Textarea
+                    id="f-msg" required rows={4}
+                    placeholder="Describe the pollution incident or your feedback..."
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    className="resize-none rounded-xl border-border focus-visible:ring-primary/30 text-sm"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full rounded-xl gradient-primary text-white shadow-glow hover:opacity-90 transition-all active:scale-95"
+                >
+                  Submit Report
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </div>
+
       </div>
     </section>
   );
