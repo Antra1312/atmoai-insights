@@ -144,7 +144,7 @@ function Hero() {
             <div className="animate-fade-up animation-delay-3 flex flex-wrap gap-3">
               <Button asChild size="lg"
                 className="h-12 rounded-2xl gradient-primary text-white shadow-glow px-7 font-semibold hover:opacity-90 hover:scale-[1.02] transition-all active:scale-95 gap-2 text-[15px]">
-                <Link to="/app/dashboard">
+                <Link to="/app/admin">
                   Explore Dashboard
                   <ArrowRight className="h-4 w-4" />
                 </Link>
