@@ -7,7 +7,7 @@ const links = [
   { label: "Home", href: "#home" },
   { label: "Features", href: "#features" },
   { label: "Forecasting", href: "#forecasting" },
-  { label: "Analytics", to: "/app/dashboard/analytics" },
+  { label: "Analytics", to: "/app/admin/monitoring" },
   { label: "Platform Preview", href: "#preview" },
   { label: "Contact", href: "#contact" },
 ];
