@@ -3,11 +3,9 @@ import { indianCities, aqiCategory } from "./data";
 export function IndiaHeatmap({
   height = 360,
   interactive = false,
-  scrollable = false,
 }: {
   height?: number | string;
   interactive?: boolean;
-  scrollable?: boolean;
 }) {
   // Approximate bounding box of the physical map image
   // Longitude ~66°E to 98°E, Latitude ~6°N to 37°N
@@ -17,24 +15,20 @@ export function IndiaHeatmap({
     return { x, y };
   };
 
-  const clampPct = (v: number, mn = 1, mx = 99) => Math.max(mn, Math.min(mx, v));
-
-  const mapContent = (
-    <div className="relative w-full" style={{ minWidth: scrollable ? '800px' : 'auto', aspectRatio: '926 / 1024' }}>
-      {/* Physical Map */}
+  return (
+    <div className="relative w-full rounded-2xl border border-border bg-sky-50" style={{ height }}>
+      {/* Physical Map — contain so full map is always visible */}
       <img
         src="/india-physical.jpg"
         alt="India Physical Map"
         className="absolute inset-0 w-full h-full"
-        style={{ objectFit: "fill", opacity: 0.95 }}
+        style={{ objectFit: "contain", objectPosition: "center", opacity: 0.95 }}
       />
       {/* Subtle overlay so dots are readable */}
-      <div className="absolute inset-0 bg-white/10 rounded-2xl pointer-events-none" />
+      <div className="absolute inset-0 bg-white/10 rounded-2xl" />
 
       {indianCities.map((c) => {
         const { x, y } = project(c.lat, c.lng);
-        const leftPct = clampPct(x);
-        const topPct = clampPct(y);
         const cat = aqiCategory(c.aqi);
         // Compact dots: 6px (good) → 12px (hazardous)
         const size = 6 + (c.aqi / 300) * 6;
@@ -42,10 +36,10 @@ export function IndiaHeatmap({
           <div
             key={c.code}
             className="group absolute -translate-x-1/2 -translate-y-1/2 z-10"
-            style={{ left: `${leftPct}%`, top: `${topPct}%` }}
+            style={{ left: `${x}%`, top: `${y}%` }}
           >
             <div className="relative">
-              {/* Pulse ring */}
+              {/* Pulse ring — slightly bigger than the dot */}
               <div
                 className="absolute rounded-full animate-pulse-ring"
                 style={{
@@ -69,23 +63,9 @@ export function IndiaHeatmap({
           </div>
         );
       })}
-    </div>
-  );
-
-  return (
-    <div className="relative w-full rounded-2xl border border-border bg-sky-50 flex flex-col" style={{ height }}>
-      {scrollable ? (
-        <div className="relative overflow-auto flex-1 w-full rounded-2xl">
-          {mapContent}
-        </div>
-      ) : (
-        <div className="relative overflow-hidden flex-1 w-full flex items-center justify-center rounded-2xl">
-          {mapContent}
-        </div>
-      )}
 
       {/* Legend */}
-      <div className={`${scrollable ? 'sticky bottom-4' : 'absolute bottom-4'} left-4 mt-auto w-max flex flex-wrap gap-2 rounded-xl glass px-3 py-2 text-[10px] font-medium z-20 shadow-sm`} style={scrollable ? { transform: 'translateY(-1rem)' } : {}}>
+      <div className="absolute bottom-4 left-4 flex flex-wrap gap-2 rounded-xl glass px-3 py-2 text-[10px] font-medium">
         {[
           { label: "Good", c: "var(--color-aqi-good)" },
           { label: "Moderate", c: "var(--color-aqi-moderate)" },
@@ -93,12 +73,7 @@ export function IndiaHeatmap({
           { label: "Unhealthy", c: "var(--color-aqi-unhealthy)" },
           { label: "Hazardous", c: "var(--color-aqi-hazardous)" },
         ].map((l) => (
-          <div
-            key={l.label}
-            className={`flex items-center gap-1.5 px-2 py-1 rounded-full ${
-              l.label === "Moderate" ? "ring-2 ring-amber-300 bg-amber-50" : ""
-            }`}
-          >
+          <div key={l.label} className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full" style={{ background: l.c }} />
             <span className="text-foreground">{l.label}</span>
           </div>
